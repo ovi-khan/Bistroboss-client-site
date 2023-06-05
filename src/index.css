@@ -4,3 +4,11 @@ body {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.drower-side a.active {
+    color: white;
+}
+.drower-side a{
+    background-color: transparent;
+}

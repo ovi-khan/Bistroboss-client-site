@@ -1,21 +1,63 @@
-import React from "react";
+import React, { useContext } from "react";
+import { FaShoppingCart } from 'react-icons/fa';
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../../Providers/AuthProvider";
+import useCart from "../../../hooks/UseCart";
 
 const NavBar = () => {
+  const { user, logOut } = useContext(AuthContext);
+  const [cart] = useCart()
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {})
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const navItem = (
     <>
       <li>
-        <Link to='/'>Home</Link>
+        <Link to="/">Home</Link>
       </li>
       <li>
-        <Link to='/menu'>Our Menu</Link>
+        <Link to="/menu">Our Menu</Link>
       </li>
       <li>
-        <Link to='/order/salad'>Order Now</Link>
+        <Link to="/order/salad">Order Now</Link>
       </li>
       <li>
-        <a>Item 3</a>
+        <Link to="/login">Login</Link>
       </li>
+      <li>
+        <Link to="/signup">Sign Up</Link>
+      </li>
+      <li>
+        <Link to="/secret">Secret</Link>
+      </li>
+      <li>
+        <Link to="/dashboard/mycart">
+          <button className="btn gap-2">
+            <FaShoppingCart></FaShoppingCart>
+            <div className="badge badge-secondary">+{cart?.length || 0}</div>
+          </button>
+        </Link>
+      </li>
+      {user?.email ? (
+        <li className="hover:text-red-500">
+          <button
+            onClick={handleLogOut}
+            className="bg-slate-400 text-white px-3 py-1 rounded-lg"
+          >
+            Log Out
+          </button>
+        </li>
+      ) : (
+        <li>
+          <Link className="ms-5" to="/login">
+            Log in
+          </Link>
+        </li>
+      )}
     </>
   );
 
@@ -52,7 +94,14 @@ const NavBar = () => {
         <ul className="menu menu-horizontal px-1">{navItem}</ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Get started</a>
+        <span>{user?.displayName}</span>
+      </div>
+      <div className="navbar-end">
+         <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+        <div className="w-10 rounded-full">
+          <img src={user?.photoURL} />
+        </div>
+      </label>
       </div>
     </div>
   );
